@@ -1,14 +1,14 @@
-"use strict"
+'use strict';
 const myEvents = require('./libs/events');
 const myValidator = require('./libs/validator');
 
 function pmEvents(options) {
-    this.sockPath = null;
-    this.eventHandler = null;
-    this.errorHandler = null;
+  this.sockPath = null;
+  this.eventHandler = null;
+  this.errorHandler = null;
 
-    myValidator.init();
-    this.init(options);
+  myValidator.init();
+  this.init(options);
 }
 
 /**
@@ -20,19 +20,12 @@ function pmEvents(options) {
  */
 
 pmEvents.prototype.preInit = function (callback) {
-    if (this.sockPath) {
-        return callback();
-    }
+  if (this.sockPath) {
+    return callback();
+  }
 
-    myEvents.getSockPath((err, sockPath) => {
-        if (err) {
-            this.error(err);          
-        } else {
-            this.sockPath = sockPath;
-        }
-
-        return callback();
-    });
+  this.sockPath = myEvents.getSockPath();
+  return callback();
 };
 
 /**
@@ -43,7 +36,7 @@ pmEvents.prototype.preInit = function (callback) {
  */
 
 pmEvents.prototype.listen = function () {
-    myEvents.main(this.sockPath, this.eventHandler, this.errorHandler);
+  myEvents.main(this.sockPath, this.eventHandler, this.errorHandler);
 };
 
 /**
@@ -55,19 +48,18 @@ pmEvents.prototype.listen = function () {
  */
 
 pmEvents.prototype.init = function (options) {
-    options = options || {};
-    options.sockPath = options.sockPath || null;
-    options.sockPath && myValidator.isSocketFile(options.sockPath);
-    this.sockPath = options.sockPath;
+  options = options || {};
+  options.sockPath = options.sockPath || null;
+  options.sockPath && myValidator.isSocketFile(options.sockPath);
+  this.sockPath = options.sockPath;
 
-    this
-    .preInit(() => {
-        this.listen();
-    });
+  this.preInit(() => {
+    this.listen();
+  });
 };
 
 /**
- * Handle events 
+ * Handle events
  *
  * @param {Function} callback
  * @return {Context} this
@@ -75,9 +67,9 @@ pmEvents.prototype.init = function (options) {
  */
 
 pmEvents.prototype.on = function (callback) {
-    myValidator.isFunction(callback);
-    this.eventHandler = callback;
-    return this;
+  myValidator.isFunction(callback);
+  this.eventHandler = callback;
+  return this;
 };
 
 /**
@@ -89,9 +81,9 @@ pmEvents.prototype.on = function (callback) {
  */
 
 pmEvents.prototype.error = function (callback) {
-    myValidator.isFunction(callback);
-    this.errorHandler = callback;
-    return this;
+  myValidator.isFunction(callback);
+  this.errorHandler = callback;
+  return this;
 };
 
 /**

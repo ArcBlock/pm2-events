@@ -1,6 +1,6 @@
 {
   "name": "@arcblock/pm2-events",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "catch pm2 events ",
   "main": "index.js",
   "scripts": {
