@@ -1,6 +1,6 @@
 {
   "name": "@arcblock/pm2-events",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "catch pm2 events ",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
     "url": "https://github.com/ArcBlock/pm2-events"
   },
   "dependencies": {
+    "expand-home-dir": "^0.0.3",
     "pm2-axon": "^4.0.0"
   },
   "devDependencies": {

@@ -1,7 +1,8 @@
-"use strict"
-const axon  = require('pm2-axon');
+'use strict';
+const axon = require('pm2-axon');
 const sub = axon.socket('sub-emitter');
 const exec = require('child_process').exec;
+const expandHomeDir = require('expand-home-dir');
 
 let events = {};
 
@@ -12,13 +13,16 @@ let events = {};
  * @return {Function} callback
  */
 
-events.getSockPath = callback => {
-    const pm2Home = process.env.PM2_HOME;
-    return pm2Home === undefined ? '~/.pm2/pub.sock' : `${pm2Home}/pub.sock`;
+events.getSockPath = (callback) => {
+  const pm2Home = process.env.PM2_HOME;
+  let sockPath =
+    pm2Home === undefined ? '~/.pm2/pub.sock' : `${pm2Home}/pub.sock`;
+
+  setTimeout(() => callback(null, expandHomeDir(sockPath), 0));
 };
 
 /**
- * Connect with sock and catch events 
+ * Connect with sock and catch events
  *
  * @param {String} sockPath
  * @param {Function} event
@@ -26,15 +30,15 @@ events.getSockPath = callback => {
  */
 
 events.main = (sockPath, event, error) => {
-    sub.connect(sockPath);
+  sub.connect(sockPath);
 
-    sub.on('process:*', (e, p) => {
-        event && event(p.event, p);
-    });
+  sub.on('process:*', (e, p) => {
+    event && event(p.event, p);
+  });
 
-    sub.on('error', e => {
-        error && error(e);
-    });
+  sub.on('error', (e) => {
+    error && error(e);
+  });
 };
 
 /**
