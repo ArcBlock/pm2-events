@@ -1,8 +1,7 @@
 'use strict';
 const axon = require('pm2-axon');
 const sub = axon.socket('sub-emitter');
-const exec = require('child_process').exec;
-const expandHomeDir = require('expand-home-dir');
+const expandTilde = require('expand-tilde');
 
 let events = {};
 
@@ -18,7 +17,7 @@ events.getSockPath = (callback) => {
   let sockPath =
     pm2Home === undefined ? '~/.pm2/pub.sock' : `${pm2Home}/pub.sock`;
 
-  setTimeout(() => callback(null, expandHomeDir(sockPath), 0));
+  setTimeout(() => callback(null, expandTilde(sockPath), 0));
 };
 
 /**
